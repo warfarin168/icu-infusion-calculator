@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICU常用藥品稀釋濃度與輸注劑量計算機</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #16324f;
@@ -252,7 +253,7 @@
 
         @media (max-width: 620px) {
             body { padding: 0; background: #fff; }
-            .container { border-radius: 0; border: 0; padding: 0 18px 24px; box-shadow: none; }
+            .container { border-radius: 0; border: 0; padding: 0 18px calc(112px + env(safe-area-inset-bottom)); box-shadow: none; }
             h2 { margin: 0 -18px 22px; padding: 22px 14px 19px; }
             .form-grid { grid-template-columns: 1fr; }
             .input-group { gap: 8px; }
@@ -311,7 +312,7 @@
 
 <div class="container">
     <h2>
-        <span class="title-icon">♥</span>
+        <span class="title-icon"><i class="fa-solid fa-heart-pulse"></i></span>
         ICU常用藥品稀釋濃度與輸注劑量計算機
     </h2>
 
@@ -321,10 +322,10 @@
 
     <div class="form-group">
         <label for="drugSelect">
-            <span class="label-icon">💉</span>
+            <span class="label-icon"><i class="fa-solid fa-syringe"></i></span>
             選擇藥品
         </label>
-        <select id="drugSelect" onchange="onDrugChange()">
+        <select id="drugSelect">
             <option value="Atracurium" selected>Atracurium</option>
             <option value="Dopamine">Dopamine</option>
             <option value="Epinephrine">Epinephrine</option>
@@ -346,20 +347,20 @@
     <div class="form-grid">
     <div class="form-group">
         <label for="weight">
-            <span class="label-icon">⚖</span>
+            <span class="label-icon"><i class="fa-solid fa-weight-scale"></i></span>
             患者體重 (kg) <span class="optional-note">非必填</span>
         </label>
-        <input type="number" id="weight" value="" step="any" oninput="calculate()" placeholder="請輸入體重">
+        <input type="number" id="weight" value="" step="any" placeholder="請輸入體重">
     </div>
 
     <div class="form-group">
         <label for="doseInput">
-            <span class="label-icon">💊</span>
+            <span class="label-icon"><i class="fa-solid fa-capsules"></i></span>
             開立劑量 (可選單位)
         </label>
         <div class="input-group">
-            <input type="number" id="doseInput" value="" step="any" oninput="calculate()" placeholder="請輸入劑量">
-            <select id="doseUnit" onchange="calculate()">
+            <input type="number" id="doseInput" value="" step="any" placeholder="請輸入劑量">
+            <select id="doseUnit">
                 <option value="amp">amp</option>
                 <option value="mg" id="unitOptMg">mg</option>
                 <option value="mcg" id="unitOptMcg">mcg</option>
@@ -369,27 +370,27 @@
 
     <div class="form-group">
         <label for="prepCount">
-            <span class="label-icon">↻</span>
+            <span class="label-icon"><i class="fa-solid fa-rotate"></i></span>
             配製次數
         </label>
-        <input type="number" id="prepCount" value="" step="1" oninput="calculate()" placeholder="請輸入每日配製次數">
+        <input type="number" id="prepCount" value="" step="1" placeholder="請輸入每日配製次數">
         <div class="detail-text" style="color: #7f8c8d; margin-top: 4px;">如用法 Q4H/PRN -> 請輸入 6</div>
     </div>
 
     <div class="form-group">
         <label for="volume">
-            <span class="label-icon">⚗</span>
+            <span class="label-icon"><i class="fa-solid fa-flask-vial"></i></span>
             加入稀釋體積 (mL)
         </label>
-        <input type="number" id="volume" value="" step="any" oninput="calculate()" placeholder="請輸入加入體積">
+        <input type="number" id="volume" value="" step="any" placeholder="請輸入加入體積">
     </div>
 
     <div class="form-group">
         <label for="flowRate">
-            <span class="label-icon">◷</span>
+            <span class="label-icon"><i class="fa-solid fa-clock"></i></span>
             輸注速度 (mL/hr)
         </label>
-        <input type="number" id="flowRate" value="" step="any" oninput="calculate()" placeholder="請輸入流速">
+        <input type="number" id="flowRate" value="" step="any" placeholder="請輸入流速">
     </div>
     </div>
 
@@ -398,7 +399,7 @@
     <section class="right-panel" aria-label="計算結果">
     <div class="result-section">
         <h3>
-            <span class="label-icon">▦</span>
+            <span class="label-icon"><i class="fa-solid fa-calculator"></i></span>
             計算結果
         </h3>
         
@@ -600,16 +601,16 @@
         const drug = drugDatabase[drugName];
         if (!drug) return;
 
-        const weightInput = document.getElementById("weight").value.trim();
+        const weightInput = String(document.getElementById("weight").value || "").trim();
         const weight = weightInput === "" ? null : parseFloat(weightInput);
-        const doseInputVal = document.getElementById("doseInput").value.trim();
+        const doseInputVal = String(document.getElementById("doseInput").value || "").trim();
         const doseInput = doseInputVal === "" ? 0 : parseFloat(doseInputVal);
         const doseUnit = document.getElementById("doseUnit").value;
-        const prepCountVal = document.getElementById("prepCount").value.trim();
+        const prepCountVal = String(document.getElementById("prepCount").value || "").trim();
         const prepCount = prepCountVal === "" ? 0 : parseInt(prepCountVal, 10);
-        const addedVolVal = document.getElementById("volume").value.trim();
+        const addedVolVal = String(document.getElementById("volume").value || "").trim();
         const addedVolume = addedVolVal === "" ? 0 : parseFloat(addedVolVal);
-        const flowRateVal = document.getElementById("flowRate").value.trim();
+        const flowRateVal = String(document.getElementById("flowRate").value || "").trim();
         const flowRate = flowRateVal === "" ? 0 : parseFloat(flowRateVal);
         const concRangeHint = document.getElementById("concRangeHint");
         const concRangeHintText = document.getElementById("concRangeHintText");
@@ -746,7 +747,29 @@
         document.getElementById("mobileDoseUnit").innerText = document.getElementById("calcDoseUnit").innerText;
     }
 
-    onDrugChange();
+    function initializeCalculator() {
+        const inputIds = ["weight", "doseInput", "prepCount", "volume", "flowRate"];
+        inputIds.forEach(function(id) {
+            const element = document.getElementById(id);
+            if (!element) return;
+            element.addEventListener("input", calculate, { passive: true });
+            element.addEventListener("change", calculate, { passive: true });
+        });
+
+        const drugSelect = document.getElementById("drugSelect");
+        const doseUnit = document.getElementById("doseUnit");
+        if (drugSelect) drugSelect.addEventListener("change", onDrugChange);
+        if (doseUnit) doseUnit.addEventListener("change", calculate);
+
+        onDrugChange();
+        window.setTimeout(calculate, 0);
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initializeCalculator);
+    } else {
+        initializeCalculator();
+    }
 </script>
 
 </body>
