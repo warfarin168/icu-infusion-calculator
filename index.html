@@ -55,6 +55,12 @@
             background: linear-gradient(125deg, #173a5e 0%, #176f98 72%, #2296b8 100%);
             letter-spacing: .02em;
             text-align: center;
+            white-space: nowrap;
+        }
+
+        .title-text {
+            white-space: nowrap;
+            line-height: 1.2;
         }
 
         .section-label {
@@ -254,7 +260,17 @@
         @media (max-width: 620px) {
             body { padding: 0; background: #fff; }
             .container { border-radius: 0; border: 0; padding: 0 18px 24px; box-shadow: none; }
-            h2 { margin: 0 -18px 22px; padding: 22px 14px 19px; }
+            h2 {
+                margin: 0 -18px 22px;
+                padding: 18px 8px 16px;
+                gap: 5px;
+                letter-spacing: 0;
+            }
+            .title-icon { font-size: 1rem; }
+            .title-text {
+                font-size: clamp(.62rem, 3.15vw, .95rem);
+                letter-spacing: 0;
+            }
             .form-grid { grid-template-columns: 1fr; }
             .input-group { gap: 8px; }
             .result-card { padding: 17px 16px; }
@@ -277,7 +293,7 @@
 <div class="container">
     <h2>
         <span class="title-icon"><i class="fa-solid fa-heart-pulse"></i></span>
-        ICU常用藥品稀釋濃度與輸注劑量計算機
+        <span class="title-text">ICU常用藥品稀釋濃度與輸注劑量計算機</span>
     </h2>
 
     <div class="workspace-grid">
