@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ICU藥品稀釋濃度與輸注劑量計算機</title>
+    <title>ICU常用藥品稀釋濃度與輸注劑量計算機</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -22,22 +22,24 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: linear-gradient(180deg, #f7fafc 0%, var(--bg-color) 100%);
+            background:
+                radial-gradient(circle at 8% 0%, rgba(22,119,168,.13), transparent 28rem),
+                linear-gradient(180deg, #f7fafc 0%, var(--bg-color) 100%);
             color: var(--primary-color);
             margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            -webkit-text-size-adjust: 100%;
-            overscroll-behavior-y: contain;
+            padding: 18px;
+            display: flex;
+            justify-content: center;
         }
 
         .container {
             width: 100%;
-            max-width: 720px;
-            margin: 0 auto;
+            max-width: 1480px;
             background: var(--card-bg);
-            padding: 0 14px calc(92px + env(safe-area-inset-bottom));
-            min-height: 100vh;
+            padding: 0 28px 24px;
+            border-radius: 20px;
+            border: 1px solid rgba(207,218,227,.85);
+            box-shadow: 0 18px 55px rgba(26, 57, 82, 0.13);
             overflow: hidden;
         }
 
@@ -46,13 +48,10 @@
             align-items: center;
             justify-content: center;
             gap: 12px;
-            position: sticky;
-            top: 0;
-            z-index: 30;
-            margin: 0 -14px 16px;
+            margin: 0 -28px 20px;
             color: #fff;
-            padding: calc(14px + env(safe-area-inset-top)) 12px 14px;
-            font-size: clamp(1.05rem, 5vw, 1.35rem);
+            padding: 20px 24px 18px;
+            font-size: clamp(1.3rem, 3vw, 1.75rem);
             background: linear-gradient(125deg, #173a5e 0%, #176f98 72%, #2296b8 100%);
             letter-spacing: .02em;
             text-align: center;
@@ -67,19 +66,21 @@
             text-transform: uppercase;
         }
 
-        .form-grid { display: grid; grid-template-columns: 1fr; gap: 0; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
 
-        .workspace-grid { display: block; }
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 28px;
+            align-items: start;
+        }
 
         .left-panel { min-width: 0; padding-right: 4px; }
 
         .right-panel {
             min-width: 0;
-            padding-left: 0;
-            border-left: 0;
-            border-top: 1px solid var(--border-color);
-            padding-top: 18px;
-            margin-top: 6px;
+            padding-left: 28px;
+            border-left: 1px solid var(--border-color);
         }
 
         .form-group {
@@ -103,7 +104,7 @@
             width: 22px;
             height: 22px;
             color: var(--accent-color) !important;
-            font-size: 16px;
+            font-size: 1rem;
             flex-shrink: 0;
         }
 
@@ -119,15 +120,14 @@
         }
 
         .input-group {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) 98px;
-            gap: 8px;
+            display: flex;
+            gap: 10px;
         }
 
         input, select {
             width: 100%;
-            min-height: 54px;
-            padding: 13px 14px;
+            min-height: 46px;
+            padding: 11px 13px;
             border: 1px solid var(--border-color);
             border-radius: 9px;
             font-size: 1rem;
@@ -184,8 +184,8 @@
 
         .result-card {
             background: #fbfdfe;
-            padding: 16px;
-            border-radius: 14px;
+            padding: 19px 20px;
+            border-radius: 13px;
             margin-bottom: 12px;
             border: 1px solid #dbe5ec;
             box-shadow: 0 5px 14px rgba(34, 68, 92, .055);
@@ -253,7 +253,7 @@
 
         @media (max-width: 620px) {
             body { padding: 0; background: #fff; }
-            .container { border-radius: 0; border: 0; padding: 0 18px calc(112px + env(safe-area-inset-bottom)); box-shadow: none; }
+            .container { border-radius: 0; border: 0; padding: 0 18px 24px; box-shadow: none; }
             h2 { margin: 0 -18px 22px; padding: 22px 14px 19px; }
             .form-grid { grid-template-columns: 1fr; }
             .input-group { gap: 8px; }
@@ -270,42 +270,6 @@
                 margin-top: 4px;
             }
         }
-
-        .mobile-summary {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 40;
-            background: rgba(255,255,255,.96);
-            backdrop-filter: blur(12px);
-            border-top: 1px solid var(--border-color);
-            padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-            box-shadow: 0 -8px 24px rgba(22,50,79,.12);
-        }
-        .mobile-summary-inner {
-            max-width: 720px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-        .summary-item {
-            background: #f5f9fc;
-            border: 1px solid #dce7ee;
-            border-radius: 12px;
-            padding: 8px 10px;
-            min-width: 0;
-        }
-        .summary-label { font-size: .72rem; color: var(--muted-color); margin-bottom: 2px; }
-        .summary-value { font-size: 1rem; font-weight: 800; color: var(--accent-color); overflow-wrap: anywhere; }
-        .tap-hint { font-size: .78rem; color: var(--muted-color); text-align: center; margin: -4px 0 12px; }
-        input, select, button { touch-action: manipulation; }
-        @media (min-width: 721px) {
-            body { padding: 20px; }
-            .container { border-radius: 20px; box-shadow: 0 18px 55px rgba(26,57,82,.13); min-height: auto; }
-            h2 { border-radius: 20px 20px 0 0; }
-        }
     </style>
 </head>
 <body>
@@ -313,10 +277,9 @@
 <div class="container">
     <h2>
         <span class="title-icon"><i class="fa-solid fa-heart-pulse"></i></span>
-        ICU藥品稀釋濃度與輸注劑量計算機
+        ICU常用藥品稀釋濃度與輸注劑量計算機
     </h2>
 
-    <div class="tap-hint">手機可直接點選欄位輸入，結果會即時更新</div>
     <div class="workspace-grid">
     <section class="left-panel" aria-label="藥品與輸入參數">
 
@@ -325,7 +288,7 @@
             <span class="label-icon"><i class="fa-solid fa-syringe"></i></span>
             選擇藥品
         </label>
-        <select id="drugSelect">
+        <select id="drugSelect" onchange="onDrugChange()">
             <option value="Atracurium" selected>Atracurium</option>
             <option value="Dopamine">Dopamine</option>
             <option value="Epinephrine">Epinephrine</option>
@@ -350,7 +313,7 @@
             <span class="label-icon"><i class="fa-solid fa-weight-scale"></i></span>
             患者體重 (kg) <span class="optional-note">非必填</span>
         </label>
-        <input type="number" id="weight" value="" step="any" placeholder="請輸入體重">
+        <input type="number" id="weight" value="" step="any" oninput="calculate()" placeholder="請輸入體重">
     </div>
 
     <div class="form-group">
@@ -359,8 +322,8 @@
             開立劑量 (可選單位)
         </label>
         <div class="input-group">
-            <input type="number" id="doseInput" value="" step="any" placeholder="請輸入劑量">
-            <select id="doseUnit">
+            <input type="number" id="doseInput" value="" step="any" oninput="calculate()" placeholder="請輸入劑量">
+            <select id="doseUnit" onchange="calculate()">
                 <option value="amp">amp</option>
                 <option value="mg" id="unitOptMg">mg</option>
                 <option value="mcg" id="unitOptMcg">mcg</option>
@@ -373,7 +336,7 @@
             <span class="label-icon"><i class="fa-solid fa-rotate"></i></span>
             配製次數
         </label>
-        <input type="number" id="prepCount" value="" step="1" placeholder="請輸入每日配製次數">
+        <input type="number" id="prepCount" value="" step="1" oninput="calculate()" placeholder="請輸入每日配製次數">
         <div class="detail-text" style="color: #7f8c8d; margin-top: 4px;">如用法 Q4H/PRN -> 請輸入 6</div>
     </div>
 
@@ -382,7 +345,7 @@
             <span class="label-icon"><i class="fa-solid fa-flask-vial"></i></span>
             加入稀釋體積 (mL)
         </label>
-        <input type="number" id="volume" value="" step="any" placeholder="請輸入加入體積">
+        <input type="number" id="volume" value="" step="any" oninput="calculate()" placeholder="請輸入加入體積">
     </div>
 
     <div class="form-group">
@@ -390,7 +353,17 @@
             <span class="label-icon"><i class="fa-solid fa-clock"></i></span>
             輸注速度 (mL/hr)
         </label>
-        <input type="number" id="flowRate" value="" step="any" placeholder="請輸入流速">
+        <input type="number" id="flowRate" value="" step="any" min="0" oninput="onFlowRateInput()" placeholder="請輸入流速">
+        <div class="detail-text">輸入流速後，系統會計算實際輸注劑量</div>
+    </div>
+
+    <div class="form-group">
+        <label for="targetDose">
+            <span class="label-icon"><i class="fa-solid fa-arrows-left-right"></i></span>
+            目標輸注劑量 (<span id="targetDoseUnit">mcg/kg/min</span>)
+        </label>
+        <input type="number" id="targetDose" value="" step="any" min="0" oninput="onTargetDoseInput()" placeholder="請輸入目標劑量">
+        <div class="detail-text" id="reverseDoseDetail">輸入目標劑量後，系統會反查輸注速度</div>
     </div>
     </div>
 
@@ -429,19 +402,6 @@
         </div>
     </div>
     </section>
-    </div>
-</div>
-
-<div class="mobile-summary" aria-live="polite">
-    <div class="mobile-summary-inner">
-        <div class="summary-item">
-            <div class="summary-label">稀釋濃度</div>
-            <div class="summary-value"><span id="mobileConc">--</span> <span id="mobileConcUnit">mg/ml</span></div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-label">輸注劑量</div>
-            <div class="summary-value"><span id="mobileDose">--</span> <span id="mobileDoseUnit">mcg/kg/min</span></div>
-        </div>
     </div>
 </div>
 
@@ -541,6 +501,48 @@
     };
 
     let isResetting = false;
+    let calculationMode = "flow";
+
+    function onFlowRateInput() {
+        calculationMode = "flow";
+        document.getElementById("targetDose").value = "";
+        calculate();
+    }
+
+    function onTargetDoseInput() {
+        calculationMode = "dose";
+        calculate();
+    }
+
+    function calculateFlowRate(drugName, targetDose, concMgMl, weight) {
+        if (!(targetDose > 0) || !(concMgMl > 0)) return { value: null, msg: "請先完成稀釋資料並輸入有效的目標輸注劑量！" };
+
+        if (drugName === "Atracurium" || drugName === "Dopamine") {
+            if (!weight) return { value: null, msg: "反查此藥物輸注速度必須輸入患者體重！" };
+            return { value: (targetDose * weight * 60) / (concMgMl * 1000) };
+        }
+
+        if (drugName === "Epinephrine" || drugName === "Norepinephrine") {
+            const totalDose = weight ? targetDose * weight : targetDose;
+            return { value: (totalDose * 60) / (concMgMl * 1000) };
+        }
+
+        if (drugName === "Fentanyl") {
+            const totalDose = weight ? targetDose * weight : targetDose;
+            return { value: totalDose / (concMgMl * 1000) };
+        }
+
+        if (drugName === "Lorazepam" || drugName === "Midazolam") {
+            const totalDose = weight ? targetDose * weight : targetDose;
+            return { value: totalDose / concMgMl };
+        }
+
+        if (drugName === "Vasopressin") {
+            return { value: (targetDose * 60) / concMgMl };
+        }
+
+        return { value: null, msg: "此藥品目前不支援反查輸注速度！" };
+    }
 
     function onDrugChange() {
         const drugName = document.getElementById("drugSelect").value;
@@ -553,6 +555,8 @@
             document.getElementById("prepCount").value = "";
             document.getElementById("volume").value = "";
             document.getElementById("flowRate").value = "";
+            document.getElementById("targetDose").value = "";
+            calculationMode = "flow";
 
             const unitOptMg = document.getElementById("unitOptMg");
             const unitOptMcg = document.getElementById("unitOptMcg");
@@ -601,17 +605,19 @@
         const drug = drugDatabase[drugName];
         if (!drug) return;
 
-        const weightInput = String(document.getElementById("weight").value || "").trim();
+        const weightInput = document.getElementById("weight").value.trim();
         const weight = weightInput === "" ? null : parseFloat(weightInput);
-        const doseInputVal = String(document.getElementById("doseInput").value || "").trim();
+        const doseInputVal = document.getElementById("doseInput").value.trim();
         const doseInput = doseInputVal === "" ? 0 : parseFloat(doseInputVal);
         const doseUnit = document.getElementById("doseUnit").value;
-        const prepCountVal = String(document.getElementById("prepCount").value || "").trim();
+        const prepCountVal = document.getElementById("prepCount").value.trim();
         const prepCount = prepCountVal === "" ? 0 : parseInt(prepCountVal, 10);
-        const addedVolVal = String(document.getElementById("volume").value || "").trim();
+        const addedVolVal = document.getElementById("volume").value.trim();
         const addedVolume = addedVolVal === "" ? 0 : parseFloat(addedVolVal);
-        const flowRateVal = String(document.getElementById("flowRate").value || "").trim();
-        const flowRate = flowRateVal === "" ? 0 : parseFloat(flowRateVal);
+        let flowRateVal = document.getElementById("flowRate").value.trim();
+        let flowRate = flowRateVal === "" ? 0 : parseFloat(flowRateVal);
+        const targetDoseVal = document.getElementById("targetDose").value.trim();
+        const targetDose = targetDoseVal === "" ? 0 : parseFloat(targetDoseVal);
         const concRangeHint = document.getElementById("concRangeHint");
         const concRangeHintText = document.getElementById("concRangeHintText");
         const doseRangeHint = document.getElementById("doseRangeHint");
@@ -684,6 +690,31 @@
         // --- 輸注劑量計算 ---
         const currentFlowUnit = drug.getFlowUnit(weight);
         document.getElementById("calcDoseUnit").innerText = currentFlowUnit;
+        document.getElementById("targetDoseUnit").innerText = currentFlowUnit;
+
+        if (calculationMode === "dose") {
+            if (!hasConcentrationInputs || targetDoseVal === "" || targetDose <= 0 || actualConcMgMl <= 0) {
+                document.getElementById("flowRate").value = "";
+                flowRateVal = "";
+                flowRate = 0;
+                document.getElementById("reverseDoseDetail").innerText = "請先完成稀釋資料並輸入目標輸注劑量";
+            } else {
+                const reverseResult = calculateFlowRate(drugName, targetDose, actualConcMgMl, weight);
+                if (reverseResult.value === null || !Number.isFinite(reverseResult.value)) {
+                    document.getElementById("flowRate").value = "";
+                    flowRateVal = "";
+                    flowRate = 0;
+                    document.getElementById("reverseDoseDetail").innerText = reverseResult.msg;
+                } else {
+                    flowRate = reverseResult.value;
+                    flowRateVal = flowRate.toString();
+                    document.getElementById("flowRate").value = flowRate.toFixed(2);
+                    document.getElementById("reverseDoseDetail").innerText = `反查輸注速度：${flowRate.toFixed(2)} mL/hr`;
+                }
+            }
+        } else {
+            document.getElementById("reverseDoseDetail").innerText = "輸入目標劑量後，系統會反查輸注速度";
+        }
 
         if (!hasConcentrationInputs || flowRateVal === "" || flowRate === 0 || actualConcMgMl === 0) {
             document.getElementById("calcDose").innerText = "--";
@@ -740,36 +771,9 @@
                 document.getElementById("prepNormal").style.display = "none";
             }
         }
-
-        document.getElementById("mobileConc").innerText = document.getElementById("calcConc").innerText;
-        document.getElementById("mobileConcUnit").innerText = document.getElementById("calcConcUnit").innerText;
-        document.getElementById("mobileDose").innerText = document.getElementById("calcDose").innerText;
-        document.getElementById("mobileDoseUnit").innerText = document.getElementById("calcDoseUnit").innerText;
     }
 
-    function initializeCalculator() {
-        const inputIds = ["weight", "doseInput", "prepCount", "volume", "flowRate"];
-        inputIds.forEach(function(id) {
-            const element = document.getElementById(id);
-            if (!element) return;
-            element.addEventListener("input", calculate, { passive: true });
-            element.addEventListener("change", calculate, { passive: true });
-        });
-
-        const drugSelect = document.getElementById("drugSelect");
-        const doseUnit = document.getElementById("doseUnit");
-        if (drugSelect) drugSelect.addEventListener("change", onDrugChange);
-        if (doseUnit) doseUnit.addEventListener("change", calculate);
-
-        onDrugChange();
-        window.setTimeout(calculate, 0);
-    }
-
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initializeCalculator);
-    } else {
-        initializeCalculator();
-    }
+    onDrugChange();
 </script>
 
 </body>
